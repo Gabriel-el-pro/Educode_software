@@ -34,7 +34,7 @@ const routes = [{
                 name: 'RegistarEstudiante',
                 path: '/dashboard/registrarEstudiante',
                 component: () =>
-                    import ('../views/registrarEstudiante.vue'),
+                    import ('../views/registroDocente.vue'),
             },
             {
                 name: 'listarEstudiante',

@@ -373,7 +373,7 @@
        this.prueba=2;
        this.isBusy = true
        let json={
-        "username":this.usuario,
+        "user":this.usuario,
         "password":this.contrasena
        };
        
@@ -381,7 +381,7 @@
       .then((response) => {
         console.log(response)
          if(response.status =="200"){
-          this.error_msg="El usuario se logio correctamente."
+        //  this.error_msg="El usuario se logio correctamente."
           this.$router.push('dashboard');
        // this.openNotification('top-center', '#EB2C40')
          }

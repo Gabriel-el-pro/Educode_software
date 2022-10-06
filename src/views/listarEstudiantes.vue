@@ -27,11 +27,12 @@
     <thead>
       <tr>
         <th scope="col">Id</th>
+        <th scope="col">Rol</th>
         <th scope="col">Nombres</th>
         <th scope="col">Apellidos</th>
         <th scope="col">Sexo</th>
-        <th scope="col">Grado</th>
-        <th scope="col">Fecha De Nacimiento</th>
+        <th scope="col">Usuario</th>
+        <th scope="col">Contraseña</th>
         <th scope="col">Accion</th>
      <!--   <th scope="col">Menu</th>
         <th scope="col">Rutas</th>-->
@@ -42,7 +43,12 @@
            
       <tr v-for="(roles, index) in items" :key="roles._id" >
         <th>{{roles._id}}</th>
+        <td>{{roles.rol}}</td>
         <td>{{roles.name}}</td>
+        <td>{{roles.last_name}}</td>
+        <td>{{roles.gender}}</td>
+        <td>{{roles.username}}</td>
+        <td>{{roles.password}}</td>
         <td><button @click="editar(index)"><b-icon icon="pen-fill" font-scale="2" variant="success"></b-icon></button>
           
           <button  @click="eliminar(roles._id)" style="margin-left:30px;"> <b-icon icon="trash-fill" font-scale="2" style="color:rgba(243, 71, 71, 0.719)"></b-icon></button>
@@ -51,7 +57,8 @@
         <td>{{roles.rutas}}</td>--> 
       </tr>
     </tbody>
-  </table>
+  </table> 
+  
   <div class="center">
     <vs-dialog  prevent-close  width="300px" not-center v-model="active3" >
       
@@ -60,10 +67,29 @@
           Editar Nombre Del <b>Rol</b>
         </h4>
       </template>
-    
-    
-      <div class="con-content" >
+      <div class="con-content"  style="margin-top:20px">
         <input v-model="input1" type="name" style="background-color:#EDE2E2;"  class="form-control input_pass" placeholder="Digite El Nombre Del Rol.">
+      </div>
+      <div class="con-content" style="margin-top:20px">
+        <input v-model="input2" type="name" style="background-color:#EDE2E2;"  class="form-control input_pass" placeholder="Digite El Nombre.">
+      </div>
+      <div class="con-content" style="margin-top:20px">
+        <input v-model="input3" type="name" style="background-color:#EDE2E2;"  class="form-control input_pass" placeholder="Digite El Apellido.">
+      </div>
+      <div class="con-content" style="margin-top:20px">
+        <b-form-select style="background-color:#EDE2E2;"  class="form-control input_pass"    v-model="sexo">
+                                        
+          <option disabled selected>Sexo</option>
+          <option value="M">M</option>
+          <option value="F">F</option>
+         </b-form-select>
+      </div>
+      <div class="con-content" style="margin-top:20px">
+        <input v-model="input5" type="name" style="background-color:#EDE2E2;"  class="form-control input_pass" placeholder="Digite El Usuario.">
+      </div>
+    
+      <div class="con-content" style="margin-top:20px">
+        <input v-model="input6" type="name" style="background-color:#EDE2E2;"  class="form-control input_pass" placeholder="Digite La Contraseña.">
       </div>
     
       <template #footer>
@@ -102,13 +128,19 @@
     
       data() {
         return {
-          input1: '',
+          input1: null,
+          input2: null,
+          input3: null,
+          sexo: null,
+          input5: null,
+          input6: null,
           active3: false,
           items: null,
           heading: 'Lista De Estudiantes Registrados',
           icon: 'pe-7s-note2 icon-gradient bg-tempting-azure',
           subheading: 'Listado De Los Diferentes Registros..',
-          posEditar:0
+          posEditar:0,
+         
         }
       },
   
@@ -117,19 +149,40 @@
            this.cargar()
       },
       methods: {
+       
         guardarEdicion(){
-          this.items[this.posEditar].name=this.input1
-          console.log( this.items[this.posEditar]._id)
-         this.axios.put('https://trackappserver.herokuapp.com/roles/'+this.items[this.posEditar]._id, this.items[this.posEditar] )
-        .then((response) => {
-         console.log(response)
-  
-          })
-        },
+        this.items[this.posEditar].rol=this.input1
+        this.items[this.posEditar].name=this.input2
+        this.items[this.posEditar].last_name=this.input3
+        this.items[this.posEditar].gender=this.sexo
+        this.items[this.posEditar].username=this.input5
+        this.items[this.posEditar].password=this.input6
+        let json={
+          'people':{rol:this.items[this.posEditar].rol,
+            name:this.items[this.posEditar].name,
+            last_name:this.items[this.posEditar].last_name,
+            gender:this.items[this.posEditar].gender,
+            username:this.items[this.posEditar].username,
+            password:this.items[this.posEditar].password,
+          }
+        }
+       // console.log( this.items[this.posEditar]._id)
+       this.axios.put('https://trackappserver.herokuapp.com/peoples/'+this.items[this.posEditar]._id, json )
+      .then((response) => {
+       console.log(response)
+       this.active3=false
+this.cargar()
+        })
+      },
         editar(id){
           this.posEditar=id;
           this.active3=true
-         this.input1=this.items[id].name
+         this.input1=this.items[id].rol
+         this.input2=this.items[id].name
+         this.input3=this.items[id].last_name
+         this.sexo=this.items[id].gender
+         this.input5=this.items[id].username
+         this.input6=this.items[id].password
          
         },
         openNotification(position = null, color) {
@@ -137,11 +190,11 @@
               progress: 'auto',
               color,
               position,
-              title: "El Estudiante Fue Eliminado Con Exito",
+              title: "El Usuario Fue Eliminado Con Exito",
             })
           },
         cargar(){
-          this.axios.get('https://trackappserver.herokuapp.com/roles')
+          this.axios.get('https://trackappserver.herokuapp.com/peoples')
         .then((response) => {
          console.log(response)
       //  for (let i = 0; i < response.data.length; i++) {
@@ -154,7 +207,7 @@
           })
         },
          eliminar(id){
-       this.axios.delete('https://trackappserver.herokuapp.com/roles/'+id)
+       this.axios.delete('https://trackappserver.herokuapp.com/peoples/'+id)
         .then((response) => {console.log(response.data)
           this.cargar()
           this.openNotification('bottom-center', '#036F0E')

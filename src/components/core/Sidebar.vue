@@ -69,15 +69,15 @@
                     },
                     {
                         icon: 'pe-7s-add-user',
-                        title: 'Registro',
+                        title: 'Usuarios',
                         child: [
                             {
-                                title: 'Registrar Estudiante',
+                                title: 'Registrar Usuarios',
                                 href: '/dashboard/registrarEstudiante',
                                 
                             },
                             {
-                                title: 'Listar Estudiantes',
+                                title: 'Listar Usuarios',
                                 href: '/dashboard/listarEstudiantes',
                             },
                             
